@@ -5,8 +5,10 @@ import {
   Text,
   View,
 } from 'react-360';
+import {InfoMenu} from "./scene/InfoMenu";
+import {ViewMenu} from "./scene/ViewMenu";
 
-export default class Hello360 extends React.Component {
+export default class MainMenu extends React.Component {
   render() {
     return (
       <View style={styles.panel}>
@@ -40,4 +42,6 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('Hello360', () => Hello360);
+AppRegistry.registerComponent('MainMenu', () => MainMenu);
+AppRegistry.registerComponent('InfoMenu', () => InfoMenu);
+AppRegistry.registerComponent('ViewMenu', () => ViewMenu);
