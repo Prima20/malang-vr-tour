@@ -9,10 +9,13 @@ export class ViewMenu extends React.Component{
 
     render(){
         return (
-            <View style={styles.wrapper}>
-                <ImageThumbnail name="Candi Badut" image="candi_thumb.png" target="candi_badut.jpg"/>
-                <ImageThumbnail name="Candi Dalam" image="candi_dalam_thumb.png" target="candi_badut_dalam.jpg"/>
-                <ImageThumbnail name="Candi Luar" image="candi_luar_thumb.png" target="candi_badut_luar.jpg"/>
+            <View style={styles.backdrop}>
+                <Text style={styles.title}>Photo Gallery</Text>
+                <View style={styles.wrapper}>
+                    <ImageThumbnail name="Candi Badut" image="candi_thumb.png" target="candi_badut.jpg"/>
+                    <ImageThumbnail name="Candi Dalam" image="candi_dalam_thumb.png" target="candi_badut_dalam.jpg"/>
+                    <ImageThumbnail name="Candi Luar" image="candi_luar_thumb.png" target="candi_badut_luar.jpg"/>
+                </View>
             </View>
         );
     }
@@ -45,15 +48,21 @@ class ImageThumbnail extends React.Component{
 }
 
 const styles = StyleSheet.create({
-    wrapper: {
+    backdrop: {
         width: 700,
         height: 300,
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         borderColor: '#303050',
         borderWidth: 5,
+    },
+    title: {
+        fontSize: 30,
+        textAlign: 'center',
+    },
+    wrapper: {
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'stretch',
+        alignItems: 'center',
         padding: 10,
     },
     name: {

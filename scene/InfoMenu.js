@@ -1,5 +1,6 @@
 import React from "react";
-import {StyleSheet, Text, View} from "react-360";
+import {StyleSheet, Text, View, VrButton, NativeModules, asset} from "react-360";
+const {AudioModule} = NativeModules;
 
 export class InfoMenu extends React.Component{
     constructor(props) {
@@ -16,10 +17,42 @@ export class InfoMenu extends React.Component{
                     penguasa kerajaan Kanjuruhan sebagaimana yang termaktub dalam prasasti Dinoyo bertahun 760 Masehi.
                     Candi Badut ini meninggalkan jejak purbakala sebagai peninggalan sejarah yang perlu di
                     jaga dan dilestarikan keadaannya.</Text>
+                <SoundMenu />
             </View>
         );
     }
 };
+
+class SoundMenu extends React.Component{
+    state = {
+      played: false,
+      hover: false,
+    };
+    render(){
+        return(
+            <VrButton
+                style={styles.button}
+                onClick={()=>{
+                    if(!this.state.played){
+                        this.setState({played:true});
+                        AudioModule.playEnvironmental({
+                            source: asset('tm2_bird002.ogg'),
+                            volume: 0.5, // play at 3/10 original volume
+                        });
+                    }else{
+                        this.setState({played:false});
+                        AudioModule.playEnvironmental({
+                            source: asset('tm2_bird002.ogg'),
+                            volume: 0, // play at 3/10 original volume
+                        });
+                    }
+                }}>
+                <Text
+                style={styles.buttontext}>Play Sound</Text>
+            </VrButton>
+        );
+    }
+}
 
 const styles = StyleSheet.create({
     wrapper: {
@@ -44,4 +77,14 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 16,
     },
+    button: {
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+        borderColor: '#303050',
+        margin: 5,
+        borderWidth: 3,
+        padding: 10,
+    },
+    buttontext:{
+        textAlign: 'center',
+    }
 });
