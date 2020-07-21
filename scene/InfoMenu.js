@@ -1,55 +1,117 @@
 import React from "react";
-import {StyleSheet, Text, View, VrButton, NativeModules, asset} from "react-360";
-const {AudioModule} = NativeModules;
+import { Text, View, VrButton, Image, NativeModules, asset } from "react-360";
+import { StyleSheet } from 'react-native'
 
-export class InfoMenu extends React.Component{
+
+const { AudioModule } = NativeModules;
+const infoModule = NativeModules.InfoMenuModule;
+
+export class InfoMenu extends React.Component {
     constructor(props) {
         super(props);
-
+        this.state = {
+            hover: false,
+            isHide: false,
+            img: {
+                name: 'info.png',
+                width: 100,
+                height: 100
+            }
+        }
     }
 
-    render(){
+    togglePanel() {
+        this._changePanelDimensions(400, 500);
+        this.setState({
+            img: {
+                name: "",
+                width: 0,
+                height: 0
+            }
+        });
+    }
+
+    resetPanel() {
+        this._changePanelDimensions(100, 100);
+        this.setState({
+            img: {
+                name: `info.png`,
+                width: 100,
+                height: 100
+            }
+        });
+    }
+
+    _changePanelDimensions(width, height) {
+        infoModule.resizePanel(width, height);
+    }
+
+    render() {
+        let { img } = this.state;
         return (
-            <View style={styles.wrapper}>
-                <Text style={styles.name}>Candi Badut</Text>
-                <Text style={styles.description}>Candi ini diperkirakan berusia lebih dari 1400 tahun,
-                    merupakan yang tertua di Jawa Timur dan diyakini adalah peninggalan Prabu Gajayana,
-                    penguasa kerajaan Kanjuruhan sebagaimana yang termaktub dalam prasasti Dinoyo bertahun 760 Masehi.
-                    Candi Badut ini meninggalkan jejak purbakala sebagai peninggalan sejarah yang perlu di
-                    jaga dan dilestarikan keadaannya.</Text>
-                <SoundMenu />
+            <View style={styles.displayPanel}>
+                <VrButton onClick={() => this.togglePanel()}>
+                    <Image source={asset(img.name)} style={{ width: img.width, height: img.height }} />
+                </VrButton>
+                    <View style={styles.attractionBox}>
+                        <View style={styles.header}>
+                        <View style={{width: '30%'}}>
+                        <VrButton
+                            onEnter={()=>this.setState({hover: true})}
+                            onExit={()=>this.setState({hover: false})}
+                            onClick={() =>  this.resetPanel() }>
+                        <Text style={[styles.hideIcon,this.state.hover ? {color: 'red', fontWeight: 'bold'} : null]}>
+                            X
+                        </Text>   
+                        </VrButton> 
+                        </View>  
+                        <View style={{width: '70%'}}>
+                        <Text style={styles.titleText}>
+                            {this.props.placeName}
+                        </Text>
+                        </View>
+                        </View>
+                        <Text style={styles.bodyText}>
+                            {this.props.overview}
+                        </Text>
+                        <SoundMenu />
+                    </View>
             </View>
         );
     }
 };
 
-class SoundMenu extends React.Component{
+class SoundMenu extends React.Component {
     state = {
-      played: false,
-      hover: false,
+        played: false,
+        hover: false,
+        title: 'Play Sound'
     };
-    render(){
-        return(
-            <VrButton
-                style={styles.button}
-                onClick={()=>{
-                    if(!this.state.played){
-                        this.setState({played:true});
-                        AudioModule.playEnvironmental({
-                            source: asset('tm2_bird002.ogg'),
-                            volume: 0.5, // play at 3/10 original volume
-                        });
-                    }else{
-                        this.setState({played:false});
-                        AudioModule.playEnvironmental({
-                            source: asset('tm2_bird002.ogg'),
-                            volume: 0, // play at 3/10 original volume
-                        });
-                    }
-                }}>
-                <Text
-                style={styles.buttontext}>Play Sound</Text>
-            </VrButton>
+    _playAudio(volume){
+        AudioModule.playEnvironmental({
+            source: asset('sound.ogg'),
+            volume: volume, // play at 3/10 original volume
+        });
+    }
+    render() {
+        return (
+            <View>
+                <VrButton
+                    style={[styles.button, this.state.hover ? { backgroundColor: 'rgba(255, 255, 255, 0.5)',borderWidth: 5, borderColor: '#0509ff'} : null]}
+                    onEnter={() => { this.setState({ hover: true }) }}
+                    onExit={() => { this.setState({ hover: false }) }}
+                    onClick={() => {
+                        if (!this.state.played) {
+                            this.setState({ played: true, title: 'Hide sound' });
+                            this._playAudio(0.5);
+                        } else {
+                            this.setState({ played: false ,  title: 'Play sound'});
+                            this._playAudio(0);
+                        }
+                    }}>
+                    <Text style={styles.buttontext}>{this.state.title}</Text>
+                </VrButton>
+            </View>
         );
     }
 }
@@ -57,7 +119,7 @@ class SoundMenu extends React.Component{
 const styles = StyleSheet.create({
     wrapper: {
         width: 400,
-        height: 300,
+        height: 400,
         backgroundColor: 'rgba(0, 0, 0, 0.9)',
         borderColor: '#303050',
         borderWidth: 5,
@@ -69,6 +131,7 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 30,
         textAlign: 'center',
+        marginRight: 5,
     },
     author: {
         fontSize: 20,
@@ -79,12 +142,41 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: 'rgba(255, 255, 255, 0.3)',
-        borderColor: '#303050',
+        borderColor: '#FFFF',
         margin: 5,
-        borderWidth: 3,
+        borderWidth: 2,
         padding: 10,
     },
-    buttontext:{
+    buttontext: {
         textAlign: 'center',
+    },
+    displayPanel: {
+        width: 100,
+        height: 100,
+        flexDirection: 'column',
+    },
+    header: {
+        flexDirection: 'row',
+    },
+    attractionBox: {
+        padding: 20,
+        backgroundColor: 'rgba(10, 10, 10, 0.9)',
+        borderColor: '#595759',
+        borderWidth: 3,
+        borderRadius: 5,
+        width: 400,
+    },
+    titleText: {
+        fontSize: 30,
+        textAlign: 'left',
+        fontWeight: 'bold'
+    },
+    bodyText: {
+        fontSize: 20,
+        textAlign: 'justify',
+        margin: 5
+    },hideIcon:{
+        fontSize: 40,
+        textAlign: 'left'      
     }
 });

@@ -1,0 +1,25 @@
+header {
+  position: relative;
+  z-index: 2;
+  left: 0px;
+  text-align: left;
+  max-width: 420px;
+  padding: 0.5em;
+  background-color: rgba(255, 255, 255, 0.90);
+  margin-bottom: 0.5em;
+  border-radius: 2px;
+}
+
+details summary {
+  font-size: 1.0em;
+  font-weight: bold;
+}
+
+details[open] summary {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+header h1 {
+  margin-top: 0px;
+}

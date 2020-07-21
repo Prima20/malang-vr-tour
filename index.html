@@ -1,25 +1,33 @@
 <html>
-  <head>
-    <title>Malang VR Tour</title>
-    <style>body { margin: 0; }</style>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <script src='https://cdn.jsdelivr.net/npm/webxr-polyfill@latest/build/webxr-polyfill.js'></script>
-    <script>var polyfill = new WebVRPolyfill();</script>
-  </head>
-  <body>
-    <!-- Attachment point for your app -->
-    <div id="container"></div>
-    <script src="./client.bundle?platform=vr"></script>
-    <script>
-      // Initialize the React 360 application
-      React360.init(
-        'index.bundle?platform=vr&dev=true',
-        document.getElementById('container'),
-        {
-          assetRoot: 'static_assets/',
-        }
-      );
-    </script>
-  </body>
-</html>
+<head>
+  <title>Malang VR Tour</title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+  <link rel="icon" href="./vr-icon.png" />
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#2196f3" />
+  <meta name="description" content="MalangVR">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
 
+<body>
+  <!-- Attachment point for your app -->
+  <div id="container"></div>
+  <script src="./client.bundle?platform=vr"></script>
+  <script>
+    // Initialize the React 360 application
+    React360.init(
+      'index.bundle?platform=vr&dev=true',
+      document.getElementById('container'),
+      {
+        assetRoot: 'static_assets/',
+      }
+    );
+  </script>
+  <!--<script src="/install.js"></script>-->
+</body>
+
+</html>
